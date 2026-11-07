@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MediVision AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500&display=swap">
+<style>
+:root{--bg:#F1F5F9;--ink:#102A43;--mute:#52667A;--line:#CBD5E1;--teal:#176B87;--acc:#42A5A5;--film:#0A1219;--filmtx:#DCE6EC;--amber:#F2B84B;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1822;--ink:#E6EEF4;--mute:#97A9B8;--line:#233646;--teal:#5BB7D1;--acc:#42A5A5}}
+:root[data-theme="dark"]{--bg:#0D1822;--ink:#E6EEF4;--mute:#97A9B8;--line:#233646;--teal:#5BB7D1;--acc:#42A5A5}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 "IBM Plex Sans",system-ui,sans-serif}
+h1,h2,h3{font-family:Sora,"Segoe UI",system-ui,sans-serif;line-height:1.1;margin:0}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.logo{font:700 20px Sora,sans-serif;letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo i{width:22px;height:22px;border-radius:50%;border:3px solid var(--teal);position:relative;display:inline-block}
+.logo i::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--acc)}
+nav ul{display:flex;gap:28px;list-style:none;margin:0;padding:0;font-size:15px}
+nav a{text-decoration:none;color:var(--mute)}nav a:hover,nav a:focus-visible{color:var(--ink)}
+.cta{background:var(--ink);color:var(--bg)!important;padding:9px 18px;border-radius:999px;font-weight:500}
+.hero{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:center;padding:36px 0 72px}
+.hero h1{font-size:clamp(36px,5vw,60px);letter-spacing:-.035em;font-weight:700}
+.hero p{color:var(--mute);font-size:18px;max-width:44ch;margin:22px 0 30px}
+.btns{display:flex;gap:12px;flex-wrap:wrap}
+.btn{font:500 15px "IBM Plex Sans",sans-serif;padding:12px 22px;border-radius:999px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn:focus-visible,button:focus-visible,input:focus-visible+span,a:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.viewer{background:var(--film);border-radius:18px;padding:14px;color:var(--filmtx);box-shadow:0 30px 60px -30px rgba(16,42,67,.55)}
+.vbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 4px 12px;font-size:13px}
+.seg{display:flex;background:#16222D;border-radius:999px;padding:3px}
+.seg button{border:0;background:transparent;color:var(--filmtx);font:500 13px "IBM Plex Sans",sans-serif;padding:6px 16px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--acc);color:#04181A}
+.stage{position:relative;border-radius:10px;overflow:hidden;cursor:ew-resize;touch-action:none;background:#000;user-select:none}
+canvas{display:block;width:100%;height:auto;aspect-ratio:1/1}
+.tag{position:absolute;top:10px;font-size:12px;background:rgba(10,18,25,.7);padding:3px 10px;border-radius:999px}
+.split{position:absolute;top:0;bottom:0;width:2px;background:var(--amber);left:50%;pointer-events:none}
+.split::after{content:"";position:absolute;top:50%;left:-13px;width:28px;height:28px;margin-top:-14px;border-radius:50%;background:var(--amber);box-shadow:0 0 0 4px rgba(242,184,75,.25)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 2px 6px}
+.tools label{cursor:pointer}
+.tools input{position:absolute;opacity:0}
+.tools span{display:inline-block;padding:7px 14px;border-radius:8px;border:1px solid #2B3F50;font-size:14px}
+.tools input:checked+span{background:#1C3A4A;border-color:var(--acc);color:#fff}
+.read{font-size:13px;color:#9FB3C2;padding:6px 4px 2px;min-height:3.4em}
+.read b{color:var(--filmtx);font-weight:500}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.two{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:48px}
+.two h2{font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em}
+.two>div:first-child p{color:var(--mute);max-width:32ch}
+.row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:24px;padding:22px 0;border-bottom:1px solid var(--line)}
+.row:first-child{padding-top:0}.row:last-child{border:0}
+.row h3{font-size:19px;letter-spacing:-.01em}
+.row p{margin:0;color:var(--mute)}
+.exp{font-size:13px;color:var(--teal);font-weight:500}
+.lanes{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+.lanes h3{font-size:22px;margin-bottom:14px}
+ol{margin:0;padding-left:22px;color:var(--mute)}ol li{padding:5px 0 5px 4px}ol li::marker{color:var(--teal);font-weight:600}
+.stack{display:flex;flex-wrap:wrap;gap:10px}
+.stack span{border:1px solid var(--line);padding:8px 16px;border-radius:999px;font-size:15px}
+.stack em{font-style:normal;color:var(--mute);font-size:13px;margin-left:8px}
+footer{border-top:1px solid var(--line);padding:36px 0 56px;color:var(--mute);font-size:14px}
+footer p{max-width:70ch;margin:0 0 10px}
+.app{display:grid;grid-template-columns:190px minmax(0,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-height:340px}
+.side{padding:16px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;background:rgba(16,42,67,.05)}
+.side button,.side a{font:500 15px "IBM Plex Sans",sans-serif;text-align:left;border:0;background:transparent;color:var(--mute);padding:9px 12px;border-radius:8px;cursor:pointer;text-decoration:none}
+.side button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+#panel{padding:24px}#panel h3{font-size:18px;margin-bottom:6px}
+.stats{display:flex;gap:36px;flex-wrap:wrap;margin-bottom:26px}.stats b{display:block;font:700 34px Sora,sans-serif;letter-spacing:-.03em}.stats span{color:var(--mute);font-size:14px}
+.list{list-style:none;margin:0 0 16px;padding:0}.list li{padding:12px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:15px}.list small,.empty{color:var(--mute)}
+.app .btn{padding:8px 16px;font-size:14px}
+.vbar .btn,.tools .btn{padding:6px 14px;font-size:13px;color:var(--filmtx);border-color:#2B3F50;background:transparent;cursor:pointer}
+.tools .btn{margin-right:6px}
+@media (max-width:860px){.app{grid-template-columns:1fr}.side{flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line)}.hero,.two,.lanes{grid-template-columns:1fr;gap:32px}.row{grid-template-columns:1fr;gap:6px}nav ul li:not(:last-child){display:none}.hero{padding-bottom:48px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav>
+ <a class="logo" href="#top"><i></i>MediVision AI</a>
+ <ul><li><a href="#tools">Tools</a></li><li><a href="#dashboard">Dashboard</a></li><li><a href="#pipeline">Pipelines</a></li><li><a href="#stack">Stack</a></li><li><a class="cta" href="#demo">Try the demo</a></li></ul>
+</nav>
+
+<header class="hero" id="top">
+ <div>
+  <h1>Transform medical images into meaningful visual insights.</h1>
+  <p>An intelligent image-processing workspace for enhancement, segmentation, visualization and experimental AI analysis of X-ray and MRI images.</p>
+  <div class="btns"><a class="btn" href="#demo">Process a sample scan</a><a class="btn ghost" href="#tools">See the tools</a></div>
+ </div>
+ <div class="viewer" id="demo">
+  <div class="vbar">
+   <div class="seg" role="group" aria-label="Modality"><button id="mX" aria-pressed="true">X-ray</button><button id="mM" aria-pressed="false">MRI</button></div>
+   <span><label class="btn">Upload image<input type="file" id="up" accept="image/*" hidden></label> <button class="btn" id="rs">Use sample</button></span>
+  </div>
+  <div class="stage" id="stage">
+   <canvas id="cv" width="256" height="256" role="img" aria-label="Before and after comparison of a synthetic scan"></canvas>
+   <span class="tag" style="left:10px">Original</span><span class="tag" style="right:10px">Processed</span>
+   <div class="split" id="split"></div>
+  </div>
+  <div class="tools" id="tools2">
+   <label><input type="checkbox" id="dn" checked><span>Denoise</span></label>
+   <label><input type="checkbox" id="ct" checked><span>Contrast</span></label>
+   <label><input type="checkbox" id="sh"><span>Sharpen</span></label>
+   <label><input type="checkbox" id="ed"><span>Edges</span></label>
+   <label><input type="checkbox" id="th"><span>Threshold</span></label>
+   <label id="segL" hidden><input type="checkbox" id="sg"><span>Segment region</span></label>
+  </div>
+  <div class="read" id="read" aria-live="polite"></div>
+  <div class="tools"><button class="btn" id="dl">Download processed image</button><span class="read" id="msg"></span></div>
+ </div>
+</header>
+</div>
+
+<div class="wrap">
+<section id="tools" class="two">
+ <div><h2>One workspace, five jobs</h2><p>Upload once. Every result stays linked to the original image.</p></div>
+ <div>
+  <div class="row"><h3>Enhance</h3><p>Grayscale, Gaussian and median filters, histogram equalization, CLAHE, sharpening, Canny edges and Otsu thresholding, each with adjustable parameters.</p></div>
+  <div class="row"><h3>Segment MRI</h3><p>A 2D U-Net marks regions in brain MRI slices. You get the original, the mask and an overlay, plus area statistics.</p></div>
+  <div class="row"><h3>Classify X-ray <span class="exp"><br>Experimental</span></h3><p>A ResNet18 model predicts Normal or Pneumonia with a confidence score. A Grad-CAM heatmap shows which regions drove the result.</p></div>
+  <div class="row"><h3>Compare</h3><p>MSE, PSNR and SSIM between any two versions, a difference map and a before/after slider. A higher score does not always mean a better medical image.</p></div>
+  <div class="row"><h3>Report</h3><p>Generate a PDF with the image, every processing step and its parameters, AI outputs and metrics. Past work stays in your history.</p></div>
+ </div>
+</section>
+
+<section id="dashboard">
+ <h2 style="font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;margin-bottom:12px">Your work, kept together</h2>
+ <p style="color:var(--mute);max-width:56ch;margin:0 0 28px">This preview reads from the viewer above. Change a tool there, then check History and Reports.</p>
+ <div class="app">
+  <div class="side" id="side"><button data-v="dash" aria-pressed="true">Dashboard</button><button data-v="hist" aria-pressed="false">History</button><button data-v="rep" aria-pressed="false">Reports</button><a href="#demo">Open workspace</a></div>
+  <div id="panel" aria-live="polite"></div>
+ </div>
+</section>
+
+<section id="pipeline">
+ <h2 style="font-size:clamp(28px,3.4vw,40px);letter-spacing:-.03em;margin-bottom:36px">Two modalities, two pipelines</h2>
+ <div class="lanes">
+  <div><h3>X-ray</h3><ol><li>Upload and validate the file</li><li>Convert to grayscale</li><li>Reduce noise</li><li>Apply CLAHE or histogram equalization</li><li>Detect edges if requested</li><li>Run the classifier and Grad-CAM if requested</li></ol></div>
+  <div><h3>MRI</h3><ol><li>Upload an image or DICOM slice</li><li>Read dimensions and voxel spacing</li><li>Normalize intensity</li><li>Denoise and enhance contrast</li><li>Select 2D slices</li><li>Run U-Net, then view the mask and overlay</li></ol></div>
+ </div>
+</section>
+
+<section id="stack" class="two">
+ <div><h2>Built with</h2><p>Image processing and AI inference live in separate modules, so models can be swapped later.</p></div>
+ <div class="stack">
+  <span>React<em>interface</em></span><span>FastAPI<em>API</em></span><span>OpenCV<em>filters</em></span><span>PyTorch<em>models</em></span><span>MongoDB<em>history</em></span><span>JWT<em>sign-in</em></span><span>ReportLab<em>PDFs</em></span>
+ </div>
+</section>
+</div>
+
+<footer><div class="wrap">
+ <p>MediVision AI is built for students, researchers and authorized professionals, for education and research only. Classifications, heatmaps and segmentation masks are experimental, have not been clinically validated, and must not be used for diagnosis or treatment.</p>
+ <p>The scan above is generated in your browser. No image leaves your device.</p>
+</div></footer>
+
+<script>
+(function(){
+var H=[],R=[],view="dash",T=0,side=document.getElementById("side"),panel=document.getElementById("panel");
+function nm(s){var o=[];if(s.dn)o.push("Denoise");if(s.ct)o.push("Contrast");if(s.sh)o.push("Sharpen");if(s.ed)o.push("Edges");if(s.sg)o.push("Segmentation");return o.length?o.join(" + "):"No processing"}
+function lab(s){return(s.mod==="xray"?"X-ray: ":"MRI: ")+s.ops}
+function sum(r){return r.file+"\n"+lab(r)+"\nPSNR "+r.psnr.toFixed(1)+" dB, contrast "+r.c0.toFixed(2)+" to "+r.c1.toFixed(2)+"\nExperimental output, not for diagnosis."}
+function render(){
+ [].forEach.call(side.querySelectorAll("button"),function(b){b.setAttribute("aria-pressed",b.dataset.v===view)});
+ var h="";
+ if(view==="dash"){h='<div class="stats"><div><b>'+T+'</b><span>Operations run</span></div><div><b>'+H.filter(function(s){return s.sg}).length+'</b><span>Segmentations</span></div><div><b>'+R.length+'</b><span>Reports</span></div></div><h3>Recent activity</h3>';
+  h+=H.length?'<ul class="list">'+H.slice(0,4).map(function(s){return'<li><span>'+lab(s)+'</span><small>'+s.t+'</small></li>'}).join("")+'</ul>':'<p class="empty">Nothing yet. Change a tool in the viewer above.</p>'}
+ else if(view==="hist"){h='<h3>Processing history</h3>'+(H.length?'<ul class="list">'+H.map(function(s){return'<li><span>'+lab(s)+'</span><small>PSNR '+s.psnr.toFixed(1)+' dB &middot; '+s.t+'</small></li>'}).join("")+'</ul>':'<p class="empty">No operations yet.</p>')}
+ else{h='<h3>Reports</h3><p class="empty">Summarize the latest result: steps, metrics and the experimental notice. The full PDF export runs on the FastAPI backend.</p><p><button class="btn" data-gen>Generate and save report</button> <small class="empty">'+note+'</small></p>';
+  h+=R.length?'<ul class="list">'+R.map(function(r,i){return'<li><span><b>'+r.file+'</b><br><small>'+lab(r)+' &middot; PSNR '+r.psnr.toFixed(1)+' dB</small></span><button class="btn ghost" data-copy="'+i+'">Copy summary</button></li>'}).join("")+'</ul>':'<p class="empty">No reports yet.</p>'}
+ panel.innerHTML=h}
+side.addEventListener("click",function(e){var v=e.target.dataset&&e.target.dataset.v;if(v){view=v;render()}});
+panel.addEventListener("click",function(e){var t=e.target;
+ if(t.hasAttribute("data-gen")&&H.length){var s=H[0],r={};for(var k in s)r[k]=s[k];r.file="MediVision-"+s.mod+"-report-"+(R.length+1);r.src=s.file;r.psnr=s.psnr;if(col){put(r,"rep")}else{R.unshift(r)}note="";render();report(r)}
+ else if(t.dataset.copy!==undefined){try{navigator.clipboard.writeText(sum(R[+t.dataset.copy])).then(function(){t.textContent="Copied"},function(){t.textContent="Copy failed"})}catch(x){t.textContent="Copy failed"}}});
+var note="",col=null;
+function esc(t){return String(t).replace(/[<>&"]/g,"")}
+function put(s,kind){if(!col)return;col.doc(kind+"-"+Date.now()+"-"+Math.floor(Math.random()*1e4)).set({kind:kind,ts:Date.now(),mod:s.mod,file:esc(s.file),ops:s.ops,t:s.t,psnr:s.psnr,c0:s.c0,c1:s.c1,sg:!!s.sg}).catch(function(){})}
+function report(r){var h='<!doctype html><meta charset="utf-8"><title>'+r.file+'</title><body style="font:15px system-ui;max-width:780px;margin:32px auto;padding:0 16px"><h1>MediVision AI report</h1><p><b>'+esc(r.src)+'</b> ('+(r.mod==="xray"?"X-ray":"MRI")+')<br>Steps: '+r.ops+'<br>PSNR '+r.psnr.toFixed(1)+' dB, contrast '+r.c0.toFixed(2)+' to '+r.c1.toFixed(2)+'</p><div style="display:flex;gap:12px"><figure style="margin:0"><img width="370" src="'+mvApi.url("orig")+'"><figcaption>Original</figcaption></figure><figure style="margin:0"><img width="370" src="'+mvApi.url("proc")+'"><figcaption>Processed</figcaption></figure></div><p><i>Experimental output for education and research. Not for diagnosis or treatment.</i></p>';
+ claude.use("downloads").then(function(d){if(!d){note="Saving is not available here.";render();return}return d.save({filename:r.file+".html",data:new Blob([h],{type:"text/html"})}).then(function(){note="Saved "+r.file+".html";render()})}).catch(function(){note="Save was not completed.";render()})}
+window.mv={snap:function(s){s.ops=nm(s);s.t=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});if(col){put(s,"op")}else{T++;H.unshift(s);render()}}};
+(async function(){try{var u=await claude.use("user"),db=await claude.use("db");if(!u||!db)return;var id=await u.id();col=db.collection("data/users/"+id);col.onSnapshot(function(sn){var o=[],r=[];sn.docs.forEach(function(d){var x=d.data();if(!x)return;(x.kind==="rep"?r:o).push(x)});o.sort(function(a,b){return b.ts-a.ts});r.sort(function(a,b){return b.ts-a.ts});H=o;R=r;T=o.length;render()},function(){})}catch(e){}})();
+render();
+})();
+</script>
+<script>
+(function(){
+var N=256,cv=document.getElementById("cv"),ctx=cv.getContext("2d"),img=ctx.createImageData(N,N);
+var mod="xray",orig,split=.5,mask=null;
+function rng(s){return function(){s|=0;s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function gen(m){var r=rng(m==="xray"?7:21),a=new Float32Array(N*N);
+ function el(x,y,cx,cy,rx,ry){var d=Math.pow((x-cx)/rx,2)+Math.pow((y-cy)/ry,2);return Math.max(0,1-d)}
+ for(var j=0;j<N;j++)for(var i=0;i<N;i++){var x=i/N,y=j/N,v;
+  if(m==="xray"){v=.62;
+   var lung=Math.min(1,el(x,y,.29,.47,.17,.3)*2.5)+Math.min(1,el(x,y,.71,.47,.17,.3)*2.5);
+   v-=.3*Math.min(1,lung);
+   v+=.12*Math.min(1,el(x,y,.44,.63,.12,.15)*2.5);
+   v+=.1*Math.max(0,1-Math.abs(x-.5)/.03);
+   if(lung>.2){var rb=Math.sin((y+.35*Math.abs(x-.5))*70);v+=.07*Math.max(0,rb)}
+   v-=.25*Math.pow(Math.hypot(x-.5,y-.5)*1.3,3);
+   v=.4+(v-.4)*.42}
+  else{var d=Math.hypot(x-.5,(y-.52)*1.12);v=.05;
+   if(d<.44)v=.62;if(d<.4)v=.46+.03*Math.sin(x*40)*Math.cos(y*34);
+   v-=.34*Math.min(1,el(x,y,.44,.5,.05,.1)*2)+.34*Math.min(1,el(x,y,.56,.5,.05,.1)*2);
+   v+=.3*Math.pow(el(x,y,.64,.36,.08,.08),.6);
+   v=.3+(v-.3)*.6}
+  var u=r()+r()+r()+r()-2;v+=u*.075;a[j*N+i]=Math.max(0,Math.min(1,v))}
+ return a}
+function blur(a){var o=new Float32Array(N*N),k=[1,2,1,2,4,2,1,2,1];
+ for(var j=0;j<N;j++)for(var i=0;i<N;i++){var s=0,n=0;
+  for(var dj=-1;dj<=1;dj++)for(var di=-1;di<=1;di++){var x=Math.min(N-1,Math.max(0,i+di)),y=Math.min(N-1,Math.max(0,j+dj));s+=a[y*N+x]*k[(dj+1)*3+di+1]}
+  o[j*N+i]=s/16}return o}
+function eq(a){var h=new Float32Array(256),i;for(i=0;i<a.length;i++)h[Math.min(255,a[i]*255|0)]++;
+ var c=0,lut=new Float32Array(256);for(i=0;i<256;i++){c+=h[i];lut[i]=c/a.length}
+ return a.map(function(v){return lut[Math.min(255,v*255|0)]})}
+function sharp(a){var b=blur(a);return a.map(function(v,i){return Math.max(0,Math.min(1,v+1.3*(v-b[i])))})}
+function sobel(a){var o=new Float32Array(N*N),mx=0,x,y;
+ for(y=1;y<N-1;y++)for(x=1;x<N-1;x++){var p=y*N+x,gx=a[p-N+1]+2*a[p+1]+a[p+N+1]-a[p-N-1]-2*a[p-1]-a[p+N-1],gy=a[p+N-1]+2*a[p+N]+a[p+N+1]-a[p-N-1]-2*a[p-N]-a[p-N+1];
+  var g=Math.hypot(gx,gy);o[p]=g;if(g>mx)mx=g}
+ return o.map(function(v){return Math.min(1,v/(mx*.5))})}
+function sd(a,sel){var s=0,s2=0,n=0;for(var i=0;i<a.length;i++){if(sel&&!sel(i))continue;s+=a[i];s2+=a[i]*a[i];n++}var m=s/n;return{m:m,s:Math.sqrt(Math.max(0,s2/n-m*m)),n:n}}
+function brain(i){var x=(i%N)/N,y=(i/N|0)/N;return Math.hypot(x-.5,(y-.52)*1.12)<.37}
+var custom=false,fname="";
+function otsu(a){var h=new Float32Array(256),i,n=a.length;for(i=0;i<n;i++)h[Math.min(255,a[i]*255|0)]++;var s=0;for(i=0;i<256;i++)s+=i*h[i];var wb=0,sb=0,mx=0,t=128;for(i=0;i<256;i++){wb+=h[i];if(!wb)continue;var wf=n-wb;if(!wf)break;sb+=i*h[i];var d=sb/wb-(s-sb)/wf,v=wb*wf*d*d;if(v>mx){mx=v;t=i}}return t/255}
+function inb(i){return custom?orig[i]>.02:brain(i)}
+function run(){
+ var a=orig.slice();
+ if(dn.checked)a=blur(blur(a));
+ if(ct.checked)a=eq(a);
+ if(sh.checked)a=sharp(a);
+ if(th.checked){var tt=otsu(a);a=a.map(function(v){return v>tt?1:0})}
+ var base=a;mask=null;var segTxt="";
+ if(mod==="mri"&&sg.checked){var b=blur(blur(base)),st=sd(b,inb),t=custom?otsu(b):st.m+2.1*st.s,c=0;mask=new Uint8Array(N*N);
+  for(var i=0;i<b.length;i++)if(inb(i)&&b[i]>t){mask[i]=1;c++}
+  segTxt="<br>Segmented area <b>"+(100*c/st.n).toFixed(1)+"%</b> of the brain slice (experimental mask, not a verified boundary)"}
+ var out=ed.checked?sobel(base):base;
+ var mse=0;for(var k=0;k<out.length;k++){var d=out[k]-orig[k];mse+=d*d}mse/=out.length;
+ var psnr=mse>0?10*Math.log10(1/mse):99,c0=sd(orig).s,c1=sd(out).s;
+ document.getElementById("read").innerHTML="Contrast (std dev) <b>"+c0.toFixed(2)+"</b> to <b>"+c1.toFixed(2)+"</b> &middot; MSE <b>"+mse.toFixed(3)+"</b> &middot; PSNR <b>"+psnr.toFixed(1)+" dB</b>. A higher score does not mean a better medical image."+segTxt;
+ draw(out);if(window.mv)window.mv.snap({file:custom?fname:"Synthetic sample",mod:mod,dn:dn.checked,ct:ct.checked,sh:sh.checked,ed:ed.checked,sg:!!mask,psnr:psnr,c0:c0,c1:c1})}
+var cache;
+function draw(out){cache=out;paint()}
+function paint(){var out=cache,sx=Math.round(split*N),d=img.data;
+ for(var j=0;j<N;j++)for(var i=0;i<N;i++){var p=j*N+i,v,r,g,b;
+  if(i<sx){v=orig[p]*255;r=g=b=v}
+  else{v=out[p]*255;r=g=b=v;if(mask&&mask[p]){r=v*.4+242*.6;g=v*.4+184*.6;b=v*.4+75*.6}}
+  var q=p*4;d[q]=r;d[q+1]=g;d[q+2]=b;d[q+3]=255}
+ ctx.putImageData(img,0,0);document.getElementById("split").style.left=(split*100)+"%"}
+var dn=document.getElementById("dn"),ct=document.getElementById("ct"),sh=document.getElementById("sh"),ed=document.getElementById("ed"),sg=document.getElementById("sg"),th=document.getElementById("th");
+[dn,ct,sh,ed,sg,th].forEach(function(e){e.addEventListener("change",run)});
+function setMod(m){mod=m;if(!custom)orig=gen(m);document.getElementById("mX").setAttribute("aria-pressed",m==="xray");document.getElementById("mM").setAttribute("aria-pressed",m==="mri");
+ document.getElementById("segL").hidden=m!=="mri";if(m!=="mri")sg.checked=false;run()}
+document.getElementById("mX").onclick=function(){setMod("xray")};
+document.getElementById("mM").onclick=function(){setMod("mri")};
+var st=document.getElementById("stage"),drag=false;
+function mv(e){var r=st.getBoundingClientRect();split=Math.max(.02,Math.min(.98,(e.clientX-r.left)/r.width));paint()}
+st.addEventListener("pointerdown",function(e){drag=true;st.setPointerCapture(e.pointerId);mv(e)});
+st.addEventListener("pointermove",function(e){if(drag)mv(e)});
+st.addEventListener("pointerup",function(){drag=false});
+function cnv(w){var c=document.createElement("canvas");c.width=c.height=N;var x=c.getContext("2d"),im=x.createImageData(N,N),s=w==="orig"?orig:cache;for(var p=0;p<N*N;p++){var v=s[p]*255,q=p*4,r=v,g=v,b=v;if(w!=="orig"&&mask&&mask[p]){r=v*.4+145;g=v*.4+110;b=v*.4+45}im.data[q]=r;im.data[q+1]=g;im.data[q+2]=b;im.data[q+3]=255}x.putImageData(im,0,0);return c}
+window.mvApi={url:function(w){return cnv(w).toDataURL("image/png")},blob:function(w){return new Promise(function(ok){cnv(w).toBlob(ok,"image/png")})}};
+document.getElementById("up").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;var fr=new FileReader();fr.onload=function(){var u=new Image();u.onload=function(){N=Math.max(128,Math.min(384,Math.max(u.width,u.height)));cv.width=cv.height=N;img=ctx.createImageData(N,N);var t=document.createElement("canvas");t.width=t.height=N;var x=t.getContext("2d");x.fillStyle="#000";x.fillRect(0,0,N,N);var s=Math.min(N/u.width,N/u.height);x.drawImage(u,(N-u.width*s)/2,(N-u.height*s)/2,u.width*s,u.height*s);var d=x.getImageData(0,0,N,N).data,a=new Float32Array(N*N);for(var i=0;i<N*N;i++)a[i]=(.299*d[i*4]+.587*d[i*4+1]+.114*d[i*4+2])/255;orig=a;custom=true;fname=f.name.slice(0,60);split=.5;run()};u.src=fr.result};fr.readAsDataURL(f);e.target.value=""});
+document.getElementById("rs").onclick=function(){custom=false;N=256;cv.width=cv.height=N;img=ctx.createImageData(N,N);split=.5;setMod(mod)};
+document.getElementById("dl").onclick=function(){var m=document.getElementById("msg");claude.use("downloads").then(function(d){if(!d){m.textContent="Saving is not available here.";return}return mvApi.blob("proc").then(function(b){return d.save({filename:"processed.png",data:b})}).then(function(){m.textContent="Saved processed.png"})}).catch(function(){m.textContent="Save was not completed."})};
+setMod("xray");
+})();
+</script>
+</body>
+</html>
